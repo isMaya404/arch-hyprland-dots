@@ -3,19 +3,53 @@ return {
 
     -- colorscheme
     {
-        'gbprod/nord.nvim',
+        'svrana/neosolarized.nvim',
         lazy = false,
         priority = 1000,
         config = function()
-            require('nord').setup {
-                transparent = false,
+            require('neosolarized').setup {
+                comment_italics = true,
+                background_set = false,
             }
-            vim.cmd.colorscheme 'nord'
+            vim.cmd.colorscheme 'neosolarized'
         end,
+        dependencies = {
+            'tjdevries/colorbuddy.nvim',
+        },
     },
-    install = {
-        colorscheme = { 'nord' },
-    },
+
+    -- {
+    --     'gbprod/nord.nvim',
+    --     lazy = false,
+    --     priority = 1000,
+    --     config = function()
+    --         require('nord').setup {
+    --             transparent = false,
+    --         }
+    --         vim.cmd.colorscheme 'nord'
+    --     end,
+    -- },
+    -- install = {
+    --     colorscheme = { 'nord' },
+    -- },
+    -- {
+    --     'rose-pine/neovim',
+    --     lazy = false,
+    --     priority = 1000,
+    --     name = 'rose-pine',
+    --     config = function()
+    --         vim.cmd 'colorscheme rose-pine'
+    --     end,
+    -- },
+    -- {
+    --     'craftzdog/solarized-osaka.nvim',
+    --     lazy = false,
+    --     priority = 1000,
+    --     opts = {},
+    --     config = function()
+    --         vim.cmd 'colorscheme solarized-osaka'
+    --     end,
+    -- },
 
     -- {
     --     'projekt0n/github-nvim-theme',
@@ -444,7 +478,7 @@ return {
         keys = { { '<leader>u', '<cmd>UndotreeToggle<CR>', desc = 'Undo Tree' } },
     },
 
-    -- more efficient typescript lsp
+    -- faster typescript lsp
     {
         'pmizio/typescript-tools.nvim',
         filetypes = { 'typescript', 'typescriptreact', 'javascript', 'javascriptreact' },

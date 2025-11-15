@@ -1,5 +1,5 @@
 -- require('neoconf').setup {}
--- local lspconfig = require 'lspconfig'
+local lspconfig = require 'lspconfig'
 require('fidget').setup {}
 
 vim.diagnostic.config {
@@ -127,13 +127,6 @@ local servers = {
         },
         root_markers = { '.git' },
         validate = { enable = true },
-        schemas = {
-            {
-                -- this will autocomplete valid keys
-                fileMatch = { 'electron-builder.json' },
-                url = 'https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json',
-            },
-        },
     },
 
     sqls = {
@@ -143,23 +136,23 @@ local servers = {
         settings = {},
     },
 
-    cssls = {
-        cmd = { 'vscode-css-language-server', '--stdio' },
-        filetypes = { 'css', 'scss', 'less' },
-        init_options = { provideFormatter = false },
-        root_markers = { 'package.json', '.git' },
-        settings = {
-            css = { validate = true },
-            scss = { validate = true },
-        },
-    },
-
-    html = {
-        cmd = { 'vscode-html-language-server', '--stdio' },
-        filetypes = { 'html', 'ejs', 'pug' },
-        root_markers = { 'package.json', '.git' },
-        init_options = { embeddedLanguages = { css = true, javascript = true } },
-    },
+    -- cssls = {
+    --     cmd = { 'vscode-css-language-server', '--stdio' },
+    --     filetypes = { 'css', 'scss', 'less' },
+    --     init_options = { provideFormatter = false },
+    --     root_markers = { 'package.json', '.git' },
+    --     settings = {
+    --         css = { validate = true },
+    --         scss = { validate = true },
+    --     },
+    -- },
+    --
+    -- html = {
+    --     cmd = { 'vscode-html-language-server', '--stdio' },
+    --     filetypes = { 'html', 'ejs', 'pug' },
+    --     root_markers = { 'package.json', '.git' },
+    --     init_options = { embeddedLanguages = { css = true, javascript = true } },
+    -- },
 
     graphql = {
         cmd = { 'graphql-lsp', 'server', '-m', 'stream' },
@@ -198,37 +191,150 @@ local servers = {
     },
 
     -- ts_ls = {
-    --   filetypes = { 'javascript', 'typescript', 'javascriptreact', 'typescriptreact' },
-    --   root_dir = lspconfig.util.root_pattern('tsconfig.json', '.git'),
-    --   init_options = {
-    --     preferences = {
-    --       disableSuggestions = true,
+    --     init_options = { hostInfo = 'neovim' },
+    --     cmd = { 'typescript-language-server', '--stdio' },
+    --     filetypes = {
+    --         'javascript',
+    --         'javascriptreact',
+    --         'javascript.jsx',
+    --         'typescript',
+    --         'typescriptreact',
+    --         'typescript.tsx',
     --     },
-    --   },
+    --     root_dir = function(bufnr, on_dir)
+    --         -- The project root is where the LSP can be started from
+    --         -- As stated in the documentation above, this LSP supports monorepos and simple projects.
+    --         -- We select then from the project root, which is identified by the presence of a package
+    --         -- manager lock file.
+    --         local root_markers = { 'package-lock.json', 'yarn.lock', 'pnpm-lock.yaml', 'bun.lockb', 'bun.lock' }
+    --         -- Give the root markers equal priority by wrapping them in a table
+    --         root_markers = vim.fn.has 'nvim-0.11.3' == 1 and { root_markers, { '.git' } } or vim.list_extend(root_markers, { '.git' })
+    --
+    --         -- exclude deno
+    --         if vim.fs.root(bufnr, { 'deno.json', 'deno.lock' }) then
+    --             return
+    --         end
+    --
+    --         -- We fallback to the current working directory if no project root is found
+    --         local project_root = vim.fs.root(bufnr, root_markers) or vim.fn.getcwd()
+    --
+    --         on_dir(project_root)
+    --     end,
+    --     handlers = {
+    --         -- handle rename request for certain code actions like extracting functions / types
+    --         ['_typescript.rename'] = function(_, result, ctx)
+    --             local client = assert(vim.lsp.get_client_by_id(ctx.client_id))
+    --             vim.lsp.util.show_document({
+    --                 uri = result.textDocument.uri,
+    --                 range = {
+    --                     start = result.position,
+    --                     ['end'] = result.position,
+    --                 },
+    --             }, client.offset_encoding)
+    --             vim.lsp.buf.rename()
+    --             return vim.NIL
+    --         end,
+    --     },
+    --     commands = {
+    --         ['editor.action.showReferences'] = function(command, ctx)
+    --             local client = assert(vim.lsp.get_client_by_id(ctx.client_id))
+    --             local file_uri, position, references = unpack(command.arguments)
+    --
+    --             local quickfix_items = vim.lsp.util.locations_to_items(references --[[@as any]], client.offset_encoding)
+    --             vim.fn.setqflist({}, ' ', {
+    --                 title = command.title,
+    --                 items = quickfix_items,
+    --                 context = {
+    --                     command = command,
+    --                     bufnr = ctx.bufnr,
+    --                 },
+    --             })
+    --
+    --             vim.lsp.util.show_document({
+    --                 uri = file_uri --[[@as string]],
+    --                 range = {
+    --                     start = position --[[@as lsp.Position]],
+    --                     ['end'] = position --[[@as lsp.Position]],
+    --                 },
+    --             }, client.offset_encoding)
+    --             ---@diagnostic enable: assign-type-mismatch
+    --
+    --             vim.cmd 'botright copen'
+    --         end,
+    --     },
+    --     on_attach = function(client, bufnr)
+    --         -- ts_ls provides `source.*` code actions that apply to the whole file. These only appear in
+    --         -- `vim.lsp.buf.code_action()` if specified in `context.only`.
+    --         vim.api.nvim_buf_create_user_command(bufnr, 'LspTypescriptSourceAction', function()
+    --             local source_actions = vim.tbl_filter(function(action)
+    --                 return vim.startswith(action, 'source.')
+    --             end, client.server_capabilities.codeActionProvider.codeActionKinds)
+    --
+    --             vim.lsp.buf.code_action {
+    --                 context = {
+    --                     only = source_actions,
+    --                     diagnostics = {},
+    --                 },
+    --             }
+    --         end, {})
+    --     end,
+    -- },
+
+    -- tsgo = {
+    --     cmd = { 'tsgo', '--lsp', '--stdio' },
+    --     filetypes = {
+    --         'javascript',
+    --         'javascriptreact',
+    --         'javascript.jsx',
+    --         'typescript',
+    --         'typescriptreact',
+    --         'typescript.tsx',
+    --     },
+    --     root_dir = function(bufnr, on_dir)
+    --         local root_markers = { 'package-lock.json', 'yarn.lock', 'pnpm-lock.yaml', 'bun.lockb', 'bun.lock' }
+    --         -- Give the root markers equal priority by wrapping them in a table
+    --         root_markers = vim.fn.has 'nvim-0.11.3' == 1 and { root_markers, { '.git' } } or vim.list_extend(root_markers, { '.git' })
+    --
+    --         -- exclude deno
+    --         if vim.fs.root(bufnr, { 'deno.json', 'deno.lock' }) then
+    --             return
+    --         end
+    --
+    --         -- We fallback to the current working directory if no project root is found
+    --         local project_root = vim.fs.root(bufnr, root_markers) or vim.fn.getcwd()
+    --
+    --         on_dir(project_root)
+    --     end,
     -- },
 
     -- vtsls = {
     --     cmd = { 'vtsls', '--stdio' },
-    --     filetypes = { 'typescript', 'typescriptreact', 'javascript', 'javascriptreact' },
-    --     root_dir = function(fname)
-    --         -- disable tsserver inside any folder that has deno.json
-    --         if lspconfig.util.root_pattern('deno.json', 'deno.jsonc')(fname) then
-    --             return nil
-    --         end
-    --         return lspconfig.util.root_pattern('tsconfig.json', 'package.json', '.git')(fname)
-    --     end,
-    --     single_file_support = true,
     --     init_options = {
-    --         preferences = {
-    --             disableSuggestions = true,
-    --         },
+    --         hostInfo = 'neovim',
     --     },
-    --     settings = {
-    --         vtsls = {
-    --             autoUseWorkspaceTsdk = true,
-    --             enableMoveToFileCodeAction = true,
-    --         },
+    --     filetypes = {
+    --         'javascript',
+    --         'javascriptreact',
+    --         'javascript.jsx',
+    --         'typescript',
+    --         'typescriptreact',
+    --         'typescript.tsx',
     --     },
+    --     root_dir = function(bufnr, on_dir)
+    --         local root_markers = { 'package-lock.json', 'yarn.lock', 'pnpm-lock.yaml', 'bun.lockb', 'bun.lock' }
+    --         -- Give the root markers equal priority by wrapping them in a table
+    --         root_markers = vim.fn.has 'nvim-0.11.3' == 1 and { root_markers, { '.git' } } or vim.list_extend(root_markers, { '.git' })
+    --
+    --         -- exclude deno
+    --         if vim.fs.root(bufnr, { 'deno.json', 'deno.lock' }) then
+    --             return
+    --         end
+    --
+    --         -- We fallback to the current working directory if no project root is found
+    --         local project_root = vim.fs.root(bufnr, root_markers) or vim.fn.getcwd()
+    --
+    --         on_dir(project_root)
+    --     end,
     -- },
 
     tailwindcss = {
@@ -418,12 +524,13 @@ require('mason-tool-installer').setup {
         -- lsp's
         'lua-language-server',
         'clangd',
-        'css-lsp',
-        'html-lsp',
+        -- 'css-lsp',
+        -- 'html-lsp',
         'tailwindcss-language-server',
-        -- 'typescript-language-server',
+        'typescript-language-server',
         'emmet-language-server',
         'vtsls',
+        'tsgo',
 
         -- formatters
         'stylua',

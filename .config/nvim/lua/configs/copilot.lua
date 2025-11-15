@@ -1,4 +1,9 @@
 require('copilot').setup {
+    settings = {
+        telemetry = {
+            telemetryLevel = 'none',
+        },
+    },
     suggestion = {
         enabled = true,
         auto_trigger = true, -- inline suggestions
