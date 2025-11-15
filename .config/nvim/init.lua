@@ -28,7 +28,7 @@ require('lazy').setup {
             enabled = not vim.g.vscode,
         },
         {
-            import = 'vsc-nvim.plugins',
+            import = 'vsc.plugins',
             enabled = vim.g.vscode,
         },
     },
