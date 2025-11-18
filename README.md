@@ -13,4 +13,4 @@
 
 <img src="./arch-btw.png" width="100%"/>
 
-- [@JaKooLit](https://github.com/JaKooLit) - Used early versions of his repo (2023 releases) for my base hyprland configs
+- [@JaKooLit](https://github.com/JaKooLit) - Used early versions of his repo for my base hyprland configs
