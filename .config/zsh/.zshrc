@@ -88,14 +88,14 @@ zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 # --------------------------------------------------------------------------
 
 # Remove binding
-bindkey -r '^L'
+# bindkey -r '^L'
 
 # --------------------------------------------------------------------------
 
 # Keybindings
 
 # tmux sessionizers 
-bindkey -s '\el' "tms\n" 
+# bindkey -s '\el' "tms\n" 
 bindkey -s '\ed' "tms switch\n" 
 bindkey -s '\ef' 'tmux-sessionizer\n' 
 
@@ -263,8 +263,8 @@ setopt hist_find_no_dups
 # Aliases
 alias nz='nvim ~/.zshrc'
 alias sc='source ~/.config/zsh/.zshrc'
-alias t='thunar' 
-alias pn='pnpm'
+alias c='clear'
+alias off='systemctl poweroff'
 
 alias lv='ls -1 --color'
 alias ls='ls --color'
@@ -272,14 +272,15 @@ alias sl='ls --color'
 alias la='ls -a'
 alias ll='ls -l'
 alias lla='ls -la'
-alias c='clear'
-alias off='systemctl poweroff'
 
 alias yasuf='yay -Syyu'
 alias yacleanf='yay -Sc --noconfirm' 
 alias parucleanf='paru -Sc --noconfirm' 
+alias t='thunar' 
+alias pn='pnpm'
 
 alias a='tmux a'
+alias tn='tmux new'
 alias tls='tmux ls'
 alias tks='tmux kill-server'
 
@@ -331,6 +332,9 @@ case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
+
+# export PGUSER=maya
+# export PGDATABASE=maya
 
 # Shell integrations
 eval "$(fzf --zsh)"
