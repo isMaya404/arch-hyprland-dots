@@ -351,17 +351,17 @@ return {
         end,
     },
 
-    {
-        'zbirenbaum/copilot.lua',
-        cmd = 'Copilot',
-        event = 'InsertEnter',
-        requires = {
-            'copilotlsp-nvim/copilot-lsp', -- NES functionality
-        },
-        config = function()
-            require 'configs.copilot'
-        end,
-    },
+    -- {
+    --     'zbirenbaum/copilot.lua',
+    --     cmd = 'Copilot',
+    --     event = 'InsertEnter',
+    --     requires = {
+    --         'copilotlsp-nvim/copilot-lsp', -- NES functionality
+    --     },
+    --     config = function()
+    --         require 'configs.copilot'
+    --     end,
+    -- },
 
     -- peak free code completion ai
     -- {
@@ -479,13 +479,13 @@ return {
     },
 
     -- faster typescript lsp
-    {
-        'pmizio/typescript-tools.nvim',
-        filetypes = { 'typescript', 'typescriptreact', 'javascript', 'javascriptreact' },
-        config = function()
-            require 'configs.ts_tools'
-        end,
-    },
+    -- {
+    --     'pmizio/typescript-tools.nvim',
+    --     filetypes = { 'typescript', 'typescriptreact', 'javascript', 'javascriptreact' },
+    --     config = function()
+    --         require 'configs.ts_tools'
+    --     end,
+    -- },
 
     -- {
     --     'folke/neoconf.nvim',
